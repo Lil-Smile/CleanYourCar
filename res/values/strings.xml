@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CleanYourCar</string>
+    <string name="cleanOrMot">Мыть или не мыть?</string>
+    <string name="knowIt">Узнать</string>
+    <string name="Save">Сохранить</string>
+    <string name="Days">На основании скольки дней строить прогноз?</string>
+    <string name="city">Вы находитесь в городе:</string>
+    <string name="howOften">Как часто уведомлять?</string>
+    <string name="oncePerDay">Раз в день</string>
+    <string name="threePerWeek">Три раза в неделю</string>
+    <string name="fivePerWeek">5 раз в неделю</string>
+    <string name="oncePerWeek">Раз в неделю</string>
+    <string name="areYouATourist">Путешествуете ли вы в данный момент по стране на машине (постоянно оказываетесь в
+        другом населенном пункте, отличном от постоянного)?
+    </string>
+    <string name="touristSwitch">Путешествуете?</string>
+    <string name="No">Нет</string>
+    <string name="Yes">Да</string>
+    <string name="daysToForecast">Дней для прогнозирования</string>
+    <string name="ServiceUp">Запустить сервис</string>
+    <string name="ServiceDown">Остановить сервис</string>
+</resources>
