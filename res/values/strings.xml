@@ -17,7 +17,7 @@
     <string name="touristSwitch">Путешествуете?</string>
     <string name="No">Нет</string>
     <string name="Yes">Да</string>
-    <string name="daysToForecast">Дней для прогнозирования</string>
+    <string name="daysToForecast">Дней для прогнозирования:</string>
     <string name="ServiceUp">Запустить сервис</string>
     <string name="ServiceDown">Остановить сервис</string>
 </resources>

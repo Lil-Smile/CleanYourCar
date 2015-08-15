@@ -38,6 +38,17 @@
             android:id="@+id/progressBarGetting"
             android:visibility="invisible" android:layout_alignTop="@+id/tvClean"
             android:layout_centerHorizontal="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/daysToForecast"
+            android:id="@+id/tvDaysToForecast" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:textSize="@dimen/textSize"/>
+    <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBarForDays" android:layout_below="@+id/tvDaysToForecast" android:layout_centerHorizontal="true"
+            android:max="15"/>
 </RelativeLayout>
 
 

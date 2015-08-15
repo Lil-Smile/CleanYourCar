@@ -14,10 +14,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -33,10 +30,12 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
     WeatherAsyncTask weatherAsyncTask;
 
     TextView tvCleanOrNot;
+    TextView tvDaysToForecast;
     Button bKnow;
     ProgressBar progressBar;
     Button buttonServiceUp;
     Button buttonServiceDown;
+    SeekBar seekBarDaysToForecast;
 
     final static String APP_ID = "APPID=f1d392256e09a66fef69fd4117019dc4";
     final static String START_OF_THE_LINE = "http://api.openweathermap.org/data/2.5/forecast/daily?";
@@ -55,7 +54,7 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
 
     public static final String JSON_ARRAY_STRING = "list";
 
-    public static final int DAYS = 15;
+    public static int DAYS;
 
     float LONGITUDE_INT,ALTITUDE_INT;
     boolean triggerCoord=false;//не определены
@@ -87,10 +86,14 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        preferences = getSharedPreferences("CleanYourCar",MODE_PRIVATE);
+
+        preferences = getSharedPreferences("CleanYourCar", MODE_PRIVATE);
+        DAYS = preferences.getInt("DAYS",5);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         tvCleanOrNot=(TextView)findViewById(R.id.tvClean);
+        tvDaysToForecast=(TextView)findViewById(R.id.tvDaysToForecast);
+        tvDaysToForecast.setText(getResources().getString(R.string.daysToForecast)+DAYS);
         bKnow=(Button)findViewById(R.id.bKnow);
         bKnow.setOnClickListener(this);
         progressBar=(ProgressBar)findViewById(R.id.progressBarGetting);
@@ -98,6 +101,26 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
         buttonServiceUp.setOnClickListener(this);
         buttonServiceDown=(Button)findViewById(R.id.buttonServiceDown);
         buttonServiceDown.setOnClickListener(this);
+        seekBarDaysToForecast = (SeekBar)findViewById(R.id.seekBarForDays);
+        seekBarDaysToForecast.setProgress(DAYS);
+        seekBarDaysToForecast.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                DAYS=progress;
+                preferences.edit().putInt("DAYS",progress).commit();
+                tvDaysToForecast.setText(getResources().getString(R.string.daysToForecast) + DAYS);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         if (preferences.getBoolean(TRIGGER_SERVICE,false))
         {
@@ -174,7 +197,7 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.set(Calendar.HOUR_OF_DAY, 6);
-                calendar.set(Calendar.MINUTE,0);
+                calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND,0);
                 Calendar calendarToCheck = Calendar.getInstance();
                 calendarToCheck.setTimeInMillis(System.currentTimeMillis());

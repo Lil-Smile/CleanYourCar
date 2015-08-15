@@ -4,6 +4,7 @@ import android.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
@@ -66,7 +67,8 @@ public class CleanYourCarService extends Service implements AsyncResponce{
 
     @Override
     public void processFinished(String[] output) {
-        Notification notification = new  Notification.Builder(this).setContentTitle(getResources().getString(R.string.app_name)).setContentText("Город:"+MyActivity.CITY_NAME+" прогноз:"+algoritmToClean(output)).setSmallIcon(R.drawable.ic_launcher).build();
+        Notification.Builder notificationBuilder = new  Notification.Builder(this).setContentTitle(getResources().getString(R.string.app_name)).setContentText("Город:"+MyActivity.CITY_NAME+" прогноз:"+algoritmToClean(output)).setSmallIcon(R.drawable.ic_launcher);
+        Notification notification = new Notification.BigTextStyle(notificationBuilder).bigText("Город:"+MyActivity.CITY_NAME+" прогноз:"+algoritmToClean(output)).build();
         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(0,notification);
         Log.d("TAGGED","notified");
