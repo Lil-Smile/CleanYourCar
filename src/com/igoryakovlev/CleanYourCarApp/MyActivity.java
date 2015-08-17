@@ -213,7 +213,7 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
                         AlarmManager.INTERVAL_DAY,
                         //1000*60*1,
                         alarmIntent);
-
+                Toast.makeText(getApplicationContext(),"Сервис запущен, ждите уведомлений",Toast.LENGTH_LONG).show();
 
                 break;
             }
