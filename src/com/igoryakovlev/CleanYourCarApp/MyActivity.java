@@ -16,10 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.prefs.Preferences;
 
 public class MyActivity extends Activity implements View.OnClickListener,AsyncResponce {
@@ -54,7 +51,7 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
 
     public static final String JSON_ARRAY_STRING = "list";
 
-    public static int DAYS;
+    public static int DAYS=5;
 
     float LONGITUDE_INT,ALTITUDE_INT;
     boolean triggerCoord=false;//не определены
@@ -156,15 +153,20 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
                 if (!triggerCoord)
                 {
                     //getting the coord
-                    locationManager=(LocationManager)getSystemService(LOCATION_SERVICE);
-                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new MyLocationListener(), null);
-                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    //Log.d("COORD","long:"+location.getLongitude()+" lat:"+location.getLatitude());
-                    SharedPreferences sharedPreferences = getSharedPreferences("CleanYourCar", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putFloat(LONGITUDE,(float)location.getLongitude());
-                    editor.putFloat(LATITUDE, (float) location.getLatitude());
-                    editor.commit();
+                    try {
+
+                        Location location = getLastKnownLocation();
+                        Log.d("COORD",location.toString() + "long:"+location.getLongitude()+" lat:"+location.getLatitude());
+                        SharedPreferences sharedPreferences = getSharedPreferences("CleanYourCar", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putFloat(LONGITUDE,(float) location.getLongitude());
+                        editor.putFloat(LATITUDE, (float) location.getLatitude());
+                        editor.commit();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
 
                 }
                 if(isNetworkOnline(this))
@@ -262,33 +264,6 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
         weatherAsyncTask=null;
     }
 
-    private class MyLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location location) {
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-            SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putFloat(LONGITUDE, (float) longitude);
-            editor.putFloat(LATITUDE, (float) latitude);
-            editor.commit();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    }
 
     private String algoritmToClean(String params[])
     {
@@ -306,5 +281,22 @@ public class MyActivity extends Activity implements View.OnClickListener,AsyncRe
 
 
         return "Мыть";
+    }
+
+    private Location getLastKnownLocation() {
+        locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = locationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 }

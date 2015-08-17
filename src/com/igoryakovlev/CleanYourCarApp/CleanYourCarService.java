@@ -19,7 +19,7 @@ import java.util.prefs.Preferences;
 public class CleanYourCarService extends Service implements AsyncResponce{
 
     public boolean trigger = false;//gave the forecast or not
-
+    public static SharedPreferences preferences;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -31,7 +31,7 @@ public class CleanYourCarService extends Service implements AsyncResponce{
 
         if(isNetworkOnline(this)){
             trigger=true;
-            SharedPreferences preferences = getSharedPreferences("CleanYourCar",MODE_PRIVATE);
+            preferences = getSharedPreferences("CleanYourCar",MODE_PRIVATE);
             WeatherAsyncTask weatherAsyncTask = new WeatherAsyncTask();
             weatherAsyncTask.delegate=this;
             String searchURL = MyActivity.START_OF_THE_LINE + MyActivity.LAT +
@@ -47,7 +47,13 @@ public class CleanYourCarService extends Service implements AsyncResponce{
 
         } else
         {
-            //i hope it's clear
+            Log.d("tagged","no internet");
+            PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(),0,intent,0);
+            Notification.Builder builder = new Notification.Builder(this).setContentTitle(getResources().getString(R.string.app_name)).setContentText("Похоже, нет сети, попробуйте еще раз").setContentIntent(pendingIntent).setSmallIcon(R.drawable.app_icon).setAutoCancel(true);
+            Notification notification = builder.build();
+            NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(0,notification);
+            /*//i hope it's clear
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -58,7 +64,7 @@ public class CleanYourCarService extends Service implements AsyncResponce{
                         e.printStackTrace();
                     }
                 }
-            });
+            });*/
         }
 
 
@@ -67,10 +73,10 @@ public class CleanYourCarService extends Service implements AsyncResponce{
 
     @Override
     public void processFinished(String[] output) {
-        Notification.Builder notificationBuilder = new  Notification.Builder(this).setContentTitle(getResources().getString(R.string.app_name)).setContentText("Город:"+MyActivity.CITY_NAME+" прогноз:"+algoritmToClean(output)).setSmallIcon(R.drawable.ic_launcher);
+        Notification.Builder notificationBuilder = new  Notification.Builder(this).setContentTitle(getResources().getString(R.string.app_name)).setContentText("Город:"+MyActivity.CITY_NAME+" прогноз:"+algoritmToClean(output)).setSmallIcon(R.drawable.app_icon);
         Notification notification = new Notification.BigTextStyle(notificationBuilder).bigText("Город:"+MyActivity.CITY_NAME+" прогноз:"+algoritmToClean(output)).build();
         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0,notification);
+        notificationManager.notify(1,notification);
         Log.d("TAGGED","notified");
     }
 

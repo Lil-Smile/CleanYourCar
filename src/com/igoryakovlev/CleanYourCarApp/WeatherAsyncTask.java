@@ -1,5 +1,6 @@
 package com.igoryakovlev.CleanYourCarApp;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.net.URL;
 public class WeatherAsyncTask extends AsyncTask<String,Void,String> {
 
     public AsyncResponce delegate=null;
+
 
     @Override
     protected String doInBackground(String... params) {
