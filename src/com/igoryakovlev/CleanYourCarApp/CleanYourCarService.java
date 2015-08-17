@@ -78,6 +78,7 @@ public class CleanYourCarService extends Service implements AsyncResponce{
         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(1,notification);
         Log.d("TAGGED","notified");
+        stopSelf();
     }
 
 
